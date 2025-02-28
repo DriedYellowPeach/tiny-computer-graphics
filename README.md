@@ -4,6 +4,6 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 
 ## Some Results
 
-|              tinyrenderer              |               tinyraytracer                |
-| :------------------------------------: | :----------------------------------------: |
-| ![img](./output/head_with_texture.tga) | ![img](./output/customized_ray_tracer.png) |
+|       tinyrenderer        |               tinyraytracer                |
+| :-----------------------: | :----------------------------------------: |
+| ![img](./output/head.png) | ![img](./output/customized_ray_tracer.png) |

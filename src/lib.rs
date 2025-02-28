@@ -1,2 +1,3 @@
-pub mod tiny_ray_tracer;
+pub mod raytracer;
+pub mod tiny_raytracer;
 pub mod tiny_render;

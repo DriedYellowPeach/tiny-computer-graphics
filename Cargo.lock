@@ -965,6 +965,7 @@ name = "tiny-computer-graphics"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "approx",
  "image",
  "nalgebra",
  "rand 0.9.0",

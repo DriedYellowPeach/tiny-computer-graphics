@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.95"
+approx = "0.5.1"
 image = "0.25.5"
 nalgebra = "0.33.2"
 rand = "0.9.0"

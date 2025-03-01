@@ -13,7 +13,7 @@ pub use sphere::Sphere;
 
 pub trait Visible: Sync + Send {
     /// return the distance from the origin to the hit point
-    // FIX: maybe return the hit point position directly?
+    // PERF: give another bbox1D to accelerate the hit test
     fn hit_by_ray(&self, ray: &Ray) -> Option<f64>;
 
     /// The material of the object on that position

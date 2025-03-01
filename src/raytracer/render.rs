@@ -73,6 +73,13 @@ mod tests {
             refractive_index: 1.,
         };
 
+        let mirror2 = Material {
+            diffuse_color: Color::new(40. / 255., 40. / 255., 40. / 255.),
+            albedo: Albedo::new(1., 0.1, 0.1, 0.0),
+            specular_exponent: 30.,
+            refractive_index: 1.,
+        };
+
         let l1 = Light::new(Position::new(-20., 20., 20.), 1.5);
         let l2 = Light::new(Position::new(30., 50., -25.), 1.8);
         let l3 = Light::new(Position::new(30., 20., 30.), 1.7);
@@ -83,9 +90,16 @@ mod tests {
         let sp4 = Sphere::new(Position::new(7., 5., -18.), 4., mirror.clone());
         let sp5 = Sphere::new(Position::new(-3., 2.5, -8.), 2., gold.clone());
         let box1 = AABBox::try_build(
-            Position::new(4., -4., -15.),
-            Position::new(6., -2., -12.),
+            Position::new(4.5, -3.5, -18.),
+            Position::new(8., -1.5, -13.),
             magenta.clone(),
+        )
+        .unwrap();
+
+        let floor = AABBox::try_build(
+            Position::new(-100., -20., -100.),
+            Position::new(100., -3.5, 100.),
+            mirror2.clone(),
         )
         .unwrap();
 
@@ -96,6 +110,7 @@ mod tests {
             .add_object(sp3)
             .add_object(sp4)
             .add_object(sp5)
+            .add_object(floor)
             .add_object(box1)
             .add_light(l1)
             .add_light(l2)

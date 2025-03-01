@@ -3,7 +3,7 @@ use image::{Pixel, Rgb};
 use nalgebra::{Matrix3x4, Vector3, Vector4};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Position(pub Vector3<f64>);
+pub struct Position(Vector3<f64>);
 
 pub const EPSILON: f64 = 1e-6;
 
@@ -27,6 +27,12 @@ impl From<Vector3<f64>> for Position {
     }
 }
 
+impl AsRef<Vector3<f64>> for Position {
+    fn as_ref(&self) -> &Vector3<f64> {
+        &self.0
+    }
+}
+
 impl AbsDiffEq for Position {
     type Epsilon = f64;
 
@@ -40,7 +46,7 @@ impl AbsDiffEq for Position {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Direction(pub Vector3<f64>);
+pub struct Direction(Vector3<f64>);
 
 impl AbsDiffEq for Direction {
     type Epsilon = f64;
@@ -108,6 +114,12 @@ impl Direction {
         // NOTE: snell's law: vector form
         // L' = (n1/n2) * L + ((n1/n2)cos(theta1) - cos(theta2)) * N
         Self::from((n1 / n2) * I.0 + ((n1 / n2) * cos_theta1 - cos_theta2) * N.0)
+    }
+}
+
+impl AsRef<Vector3<f64>> for Direction {
+    fn as_ref(&self) -> &Vector3<f64> {
+        &self.0
     }
 }
 

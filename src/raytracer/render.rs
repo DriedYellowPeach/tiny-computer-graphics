@@ -1,22 +1,46 @@
 use image::{Rgb, RgbImage};
+use indicatif::{ParallelProgressIterator, ProgressState, ProgressStyle};
+use rayon::iter::ParallelIterator;
 use rayon::prelude::*;
+
+use std::fmt::Write;
 
 use crate::raytracer::world::Scene;
 
 use super::world::background::Background;
 
+fn progress_bar_style() -> ProgressStyle {
+    let text = [
+        "[{bar:48.cyan/blue}] {percent}% {spinner:.green}",
+        "Elapsed Time     : {elapsed_precise}",
+        "ETA              : {eta}",
+        "Tracing Progress : {pos}/{len} rays",
+        "Tracing Speed    : {per_sec}",
+    ]
+    .join("\n");
+
+    ProgressStyle::with_template(&text)
+        .unwrap()
+        .with_key("per_sec", |state: &ProgressState, w: &mut dyn Write| {
+            _ = write!(w, "{:.0} rays/sec", state.per_sec());
+        })
+        .progress_chars("#>-")
+}
+
 pub fn render<B: Background>(img: &mut RgbImage, scene: &Scene<B>) {
     let width = img.width();
     let height = img.height();
 
-    // NOTE: using multi-threading to do ray scanning
-    img.par_pixels_mut().enumerate().for_each(|(idx, pixel)| {
-        let film_pixel = scene.camera.pixel_on_film(idx, width, height);
-        let ray = scene.camera.ray_to_pixel(film_pixel.x, film_pixel.y);
-        let color = scene.cast_ray(&ray, 0);
+    img.par_pixels_mut()
+        .progress_with_style(progress_bar_style())
+        .enumerate()
+        .for_each(|(idx, pixel)| {
+            let film_pixel = scene.camera.pixel_on_film(idx, width, height);
+            let ray = scene.camera.ray_to_pixel(film_pixel.x, film_pixel.y);
+            let color = scene.cast_ray(&ray, 0);
 
-        *pixel = Rgb::from(color);
-    });
+            *pixel = Rgb::from(color);
+        });
 }
 
 #[cfg(test)]
@@ -119,10 +143,17 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let mut img = RgbImage::new(800, 600);
+        let mut img = RgbImage::new(1200, 900);
         let scene = example_scene();
 
         render(&mut img, &scene);
         img.save("output/customized_ray_tracer.png").unwrap();
+    }
+
+    #[test]
+    fn test_rust_zip_end_on_shortest_seq() {
+        let short = [1, 3, 5];
+
+        assert_eq!((0..).zip(&short).count(), 3);
     }
 }

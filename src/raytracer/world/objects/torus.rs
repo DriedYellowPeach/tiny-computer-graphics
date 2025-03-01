@@ -21,7 +21,7 @@ impl Visible for Torus {
     }
 
     fn norm_of(&self, pos: &Position) -> crate::raytracer::Direction {
-        let rp = pos.0 - self.center.0;
+        let rp = pos.as_ref() - self.center.as_ref();
 
         let sin_theta = rp.z / self.r;
         let cos_theta = (1. - sin_theta.powi(2)).sqrt();

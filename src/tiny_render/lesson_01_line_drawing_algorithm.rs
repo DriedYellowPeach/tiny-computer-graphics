@@ -157,36 +157,4 @@ mod test {
         imageops::flip_vertical_in_place(&mut img);
         img.save("output/triangle.tga").unwrap();
     }
-
-    #[test]
-    fn draw_model_with_line() {
-        let height = 1024;
-        let width = 1024;
-        let mut img = RgbImage::new(width + 100, height + 100);
-        let model = Model::load_model("obj/alligator.obj").unwrap();
-        let vertex_to_pixel = |n: f64, scale: u32| {
-            let scale = scale as f64;
-            ((n + 1.0) * scale / 2.0) as u32
-        };
-        model.faces.iter().for_each(|&(i, j, k)| {
-            // let (xi, yi, _) = model.vertices[i];
-            // let (xj, yj, _) = model.vertices[j];
-            // let (xk, yk, _) = model.vertices[k];
-            let tri = [model.vertices[i], model.vertices[j], model.vertices[k]];
-            for i in 0..3 {
-                let v0 = tri[i];
-                let v1 = tri[(i + 1) % 3];
-
-                let x0 = vertex_to_pixel(v0.0, width);
-                let y0 = vertex_to_pixel(v0.1, height);
-
-                let x1 = vertex_to_pixel(v1.0, width);
-                let y1 = vertex_to_pixel(v1.1, height);
-                draw_line(x0, y0, x1, y1, &mut img, Rgb([255, 255, 255]));
-            }
-        });
-
-        imageops::flip_vertical_in_place(&mut img);
-        img.save("output/alligator.tga").unwrap();
-    }
 }

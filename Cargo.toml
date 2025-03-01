@@ -7,6 +7,7 @@ edition = "2021"
 anyhow = "1.0.95"
 approx = "0.5.1"
 image = "0.25.5"
+indicatif = { version = "0.17.11", features = ["rayon"] }
 nalgebra = "0.33.2"
 rand = "0.9.0"
 rayon = "1.10.0"

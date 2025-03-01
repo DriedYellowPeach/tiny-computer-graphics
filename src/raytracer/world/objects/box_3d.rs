@@ -14,7 +14,7 @@ pub struct AABBox {
 impl AABBox {
     pub fn try_build(low: Position, high: Position, material: Material) -> Result<Self> {
         for i in 0..3 {
-            if low.0[i] > high.0[i] {
+            if low.as_ref()[i] > high.as_ref()[i] {
                 bail!("Low position is greater than high position");
             }
         }
@@ -33,8 +33,8 @@ impl Visible for AABBox {
         let mut t_max = f64::MAX;
 
         for i in 0..3 {
-            let mut t_l = (self.low.0[i] - ray.position.0[i]) / ray.dir.0[i];
-            let mut t_h = (self.high.0[i] - ray.position.0[i]) / ray.dir.0[i];
+            let mut t_l = (self.low.as_ref()[i] - ray.position.as_ref()[i]) / ray.dir.as_ref()[i];
+            let mut t_h = (self.high.as_ref()[i] - ray.position.as_ref()[i]) / ray.dir.as_ref()[i];
 
             if t_l > t_h {
                 std::mem::swap(&mut t_l, &mut t_h);
@@ -61,27 +61,31 @@ impl Visible for AABBox {
 
     fn norm_of(&self, pos: &Position) -> Direction {
         // test if on slab perpendicular to x axis
-        if (pos.0.x - self.low.0.x).abs() < EPSILON {
+        let pos = pos.as_ref();
+        let low = self.low.as_ref();
+        let high = self.high.as_ref();
+
+        if (pos.x - low.x).abs() < EPSILON {
             return Direction::new(-1.0, 0.0, 0.0);
         }
 
-        if (pos.0.x - self.high.0.x).abs() < EPSILON {
+        if (pos.x - high.x).abs() < EPSILON {
             return Direction::new(1.0, 0.0, 0.0);
         }
 
-        if (pos.0.y - self.low.0.y).abs() < EPSILON {
+        if (pos.y - low.y).abs() < EPSILON {
             return Direction::new(0.0, -1.0, 0.0);
         }
 
-        if (pos.0.y - self.high.0.y).abs() < EPSILON {
+        if (pos.y - high.y).abs() < EPSILON {
             return Direction::new(0.0, 1.0, 0.0);
         }
 
-        if (pos.0.z - self.low.0.z).abs() < EPSILON {
+        if (pos.z - low.z).abs() < EPSILON {
             return Direction::new(0.0, 0.0, -1.0);
         }
 
-        if (pos.0.z - self.high.0.z).abs() < EPSILON {
+        if (pos.z - high.z).abs() < EPSILON {
             return Direction::new(0.0, 0.0, 1.0);
         }
 

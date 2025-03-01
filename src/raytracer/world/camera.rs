@@ -147,7 +147,11 @@ impl Camera {
     /// Get the ray: start from camera to the pixel on film
     pub fn ray_to_pixel(&self, x: f64, y: f64) -> Ray {
         let pixel_pos = Vector3::new(x, y, self.film_distance);
-        let mat = Matrix3::from_columns(&[self.right.0, self.up.0, self.forward.0]);
+        let mat = Matrix3::from_columns(&[
+            *self.right.as_ref(),
+            *self.up.as_ref(),
+            *self.forward.as_ref(),
+        ]);
         Ray::new(self.position, Direction::from(mat * pixel_pos))
     }
 

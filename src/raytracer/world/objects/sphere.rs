@@ -21,8 +21,8 @@ impl Sphere {
 
 impl Visible for Sphere {
     fn hit_by_ray(&self, ray: &Ray) -> Option<f64> {
-        let oc = self.center.0 - ray.position.0;
-        let o_c_prime_length = oc.dot(&ray.dir.0);
+        let oc = self.center.as_ref() - ray.position.as_ref();
+        let o_c_prime_length = oc.dot(ray.dir.as_ref());
         let d2 = oc.dot(&oc) - o_c_prime_length.powi(2);
 
         if d2 > self.radius.powi(2) {
@@ -53,6 +53,6 @@ impl Visible for Sphere {
     }
 
     fn norm_of(&self, pos: &Position) -> Direction {
-        Direction::from(pos.0 - self.center.0)
+        Direction::from(pos.as_ref() - self.center.as_ref())
     }
 }

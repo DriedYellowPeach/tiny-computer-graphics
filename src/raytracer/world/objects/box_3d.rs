@@ -1,6 +1,8 @@
 use crate::raytracer::{Direction, Position, EPSILON};
 use anyhow::{bail, Result};
 
+use std::borrow::Cow;
+
 use super::{Material, Ray, Visible};
 
 // NOTE: Axis Aligned Bounding Box
@@ -55,8 +57,8 @@ impl Visible for AABBox {
         Some(t_min)
     }
 
-    fn material_of(&self, _pos: &Position) -> &Material {
-        &self.material
+    fn material_of(&self, _pos: &Position) -> Cow<'_, Material> {
+        Cow::Borrowed(&self.material)
     }
 
     fn norm_of(&self, pos: &Position) -> Direction {

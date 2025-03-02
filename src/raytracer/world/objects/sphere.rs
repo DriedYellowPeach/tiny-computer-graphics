@@ -1,6 +1,9 @@
+use std::borrow::Cow;
+
 use super::{material::Material, Visible};
 use crate::raytracer::world::Ray;
-use crate::raytracer::{Direction, Position};
+use crate::raytracer::{Color, Direction, Position};
+use nalgebra::Vector3;
 
 #[derive(Clone, Debug)]
 pub struct Sphere {
@@ -46,16 +49,16 @@ impl Visible for Sphere {
         if near < 0. && far < 0. {
             return None;
         }
-        //
-        // if near < 0. {
-        //     return Some(far);
-        // }
+
+        if near < 0. {
+            return Some(far);
+        }
 
         Some(near)
     }
 
-    fn material_of(&self, _pos: &Position) -> &Material {
-        &self.material
+    fn material_of(&self, _pos: &Position) -> Cow<'_, Material> {
+        Cow::Borrowed(&self.material)
     }
 
     fn norm_of(&self, pos: &Position) -> Direction {
@@ -76,7 +79,13 @@ impl Visible for GradientSphere {
         self.0.hit_by_ray(ray)
     }
 
-    fn material_of(&self, pos: &Position) -> &super::material::Material {}
+    fn material_of(&self, pos: &Position) -> Cow<'_, Material> {
+        let norm = self.norm_of(pos);
+        let gradient_color = (norm.as_ref() + Vector3::new(1., 1., 1.)) * 0.5;
+        let mut temp_mat = self.0.material.clone();
+        temp_mat.diffuse_color = Color::from(gradient_color);
+        Cow::Owned(temp_mat)
+    }
 
     fn norm_of(&self, pos: &Position) -> Direction {
         self.0.norm_of(pos)

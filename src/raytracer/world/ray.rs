@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use super::objects::Material;
 use crate::raytracer::{world::Visible, Direction, Position};
 
@@ -14,7 +16,7 @@ impl<'a> HitPoint<'a> {
         }
     }
 
-    pub fn surface_material(&self) -> &Material {
+    pub fn surface_material(&self) -> Cow<'_, Material> {
         self.obj.material_of(&self.position)
     }
 

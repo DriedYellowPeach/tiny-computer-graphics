@@ -1,6 +1,6 @@
 use crate::raytracer::{Albedo, Color};
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct Material {
     pub diffuse_color: Color,
     // NOTE: albedo represents reflectivity of the surface
@@ -11,6 +11,17 @@ pub struct Material {
     pub albedo: Albedo,
     pub specular_exponent: f64,
     pub refractive_index: f64,
+}
+
+impl Default for Material {
+    fn default() -> Self {
+        Self {
+            diffuse_color: Color::WHITE,
+            albedo: Albedo::new(1.0, 0.0, 0.0, 0.0),
+            specular_exponent: 50.,
+            refractive_index: 1.,
+        }
+    }
 }
 
 impl Material {

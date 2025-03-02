@@ -1,6 +1,7 @@
-use crate::raytracer::{Direction, Position};
+use std::borrow::Cow;
 
 use super::{Material, Visible};
+use crate::raytracer::{Direction, Position};
 
 #[allow(non_snake_case)]
 pub struct Torus {
@@ -16,8 +17,8 @@ impl Visible for Torus {
         todo!()
     }
 
-    fn material_of(&self, _pos: &Position) -> &super::material::Material {
-        &self.material
+    fn material_of(&self, _pos: &Position) -> Cow<'_, Material> {
+        Cow::Borrowed(&self.material)
     }
 
     fn norm_of(&self, pos: &Position) -> crate::raytracer::Direction {

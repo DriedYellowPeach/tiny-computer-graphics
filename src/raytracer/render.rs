@@ -48,7 +48,7 @@ mod tests {
     use crate::raytracer::{
         world::{
             background::DummyBackground,
-            objects::{box_3d::AABBox, Light, Material, Sphere},
+            objects::{box_3d::AABBox, GradientSphere, Light, Material, Sphere},
             Scene,
         },
         Albedo, Color, Position,
@@ -110,11 +110,12 @@ mod tests {
         let sp1 = Sphere::new(Position::new(-3., 0., -16.), 2., ivory.clone());
         let sp2 = Sphere::new(Position::new(-1., -1.5, -12.), 2., glass.clone());
         let sp3 = Sphere::new(Position::new(1.5, -0.5, -18.), 3., red_rubber.clone());
-        let sp4 = Sphere::new(Position::new(7., 5., -18.), 4., mirror.clone());
+        let sp4 = Sphere::new(Position::new(5., 8., -18.), 4., mirror.clone());
         let sp5 = Sphere::new(Position::new(-3., 2.5, -8.), 2., gold.clone());
+        let gradient_sp = GradientSphere::new(Position::new(7., 0.5, -10.), 2.);
         let box1 = AABBox::try_build(
             Position::new(4.5, -3.5, -18.),
-            Position::new(8., -1.5, -13.),
+            Position::new(10., -1.5, -8.),
             magenta.clone(),
         )
         .unwrap();
@@ -133,6 +134,7 @@ mod tests {
             .add_object(sp3)
             .add_object(sp4)
             .add_object(sp5)
+            .add_object(gradient_sp)
             .add_object(floor)
             .add_object(box1)
             .add_light(l1)
@@ -142,11 +144,12 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let mut img = RgbImage::new(1200, 900);
+        let mut img = RgbImage::new(800, 450);
         let scene = example_scene();
 
         render(&mut img, &scene);
-        img.save("output/customized_ray_tracer_new_bg.png").unwrap();
+        img.save("output/customized_ray_tracer_gradient.png")
+            .unwrap();
     }
 
     #[test]

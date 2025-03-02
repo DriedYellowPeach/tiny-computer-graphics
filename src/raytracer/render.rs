@@ -147,7 +147,7 @@ mod tests {
         let scene = example_scene();
 
         render(&mut img, &scene);
-        img.save("output/customized_ray_tracer.png").unwrap();
+        img.save("output/customized_ray_tracer_new_bg.png").unwrap();
     }
 
     #[test]

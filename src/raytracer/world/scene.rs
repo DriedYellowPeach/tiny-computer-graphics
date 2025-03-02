@@ -72,7 +72,7 @@ where
                 continue;
             }
 
-            let shadow_ray = Ray::shadow_ray(hit_point, &light.position);
+            let shadow_ray = Ray::shadowed(hit_point, &light.position);
 
             if self
                 .intersect(&shadow_ray)
@@ -114,14 +114,14 @@ where
 
         // NOTE: Calculate Reflection and Refraction: Indirect Illumination
         let reflective_color = if hit_info.surface_material().albedo.reflective() > 0. {
-            let reflect_ray = Ray::reflected_ray_from_hit_point(ray, &hit_info);
+            let reflect_ray = ray.reflected(&hit_info);
             self.cast_ray(&reflect_ray, depth + 1)
         } else {
             self.intersect_background(ray)
         };
 
         let refractive_color = if hit_info.surface_material().albedo.refractive() > 0. {
-            let refract_ray = Ray::refracted_ray_from_hit_point(ray, &hit_info);
+            let refract_ray = ray.refracted(&hit_info);
             self.cast_ray(&refract_ray, depth + 1)
         } else {
             self.intersect_background(ray)

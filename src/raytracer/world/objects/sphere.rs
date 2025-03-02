@@ -1,5 +1,5 @@
 use super::{material::Material, Visible};
-use crate::raytracer::world::camera::Ray;
+use crate::raytracer::world::Ray;
 use crate::raytracer::{Direction, Position};
 
 #[derive(Clone)]

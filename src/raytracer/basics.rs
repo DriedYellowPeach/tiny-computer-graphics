@@ -2,6 +2,8 @@ use approx::{relative_eq, AbsDiffEq};
 use image::{Pixel, Rgb};
 use nalgebra::{Matrix3x4, Vector3, Vector4};
 
+use std::ops::{Add, Mul};
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Position(Vector3<f64>);
 
@@ -163,6 +165,12 @@ impl From<Vector3<f64>> for Color {
     }
 }
 
+impl AsRef<Vector3<f64>> for Color {
+    fn as_ref(&self) -> &Vector3<f64> {
+        &self.0
+    }
+}
+
 impl From<Color> for Rgb<u8> {
     fn from(color: Color) -> Self {
         let mut v = color.0;
@@ -212,5 +220,29 @@ impl Color {
         let mat = Matrix3x4::from_columns(&[diffusive.0, specular.0, reflective.0, refractive.0]);
 
         Color::from(mat * albedo.0)
+    }
+}
+
+impl Add for Color {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self::from(self.0 + rhs.0)
+    }
+}
+
+impl Mul<f64> for Color {
+    type Output = Self;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Self::from(self.0 * rhs)
+    }
+}
+
+impl Mul<Color> for f64 {
+    type Output = Color;
+
+    fn mul(self, rhs: Color) -> Self::Output {
+        rhs * self
     }
 }

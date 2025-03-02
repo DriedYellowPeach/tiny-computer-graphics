@@ -1,4 +1,4 @@
-use super::camera::Ray;
+use super::Ray;
 use crate::raytracer::{Direction, Position};
 
 pub mod box_3d;

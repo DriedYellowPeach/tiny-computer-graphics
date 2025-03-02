@@ -43,7 +43,7 @@ mod tests {
             center: Position::new(0., 0., 0.),
             R: 2.,
             r: 1.,
-            material: Material::IVORY,
+            material: Material::default(),
         };
 
         assert_eq!(
@@ -67,7 +67,7 @@ mod tests {
             center: Position::new(2., 3., 4.),
             R: 2.,
             r: 1.,
-            material: Material::IVORY,
+            material: Material::default(),
         };
 
         assert_abs_diff_eq!(

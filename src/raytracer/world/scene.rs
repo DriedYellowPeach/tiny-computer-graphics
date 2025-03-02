@@ -161,7 +161,7 @@ where
                 }
 
                 min_hit_dist = t;
-                let hit_point = ray.position.move_forward(t, &ray.dir);
+                let hit_point = ray.at(t);
 
                 ret = Some(HitPoint::new(obj.as_ref(), hit_point));
             }

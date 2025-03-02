@@ -131,7 +131,7 @@ impl From<Vector3<f64>> for Direction {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Albedo(Vector4<f64>);
 
 impl Albedo {

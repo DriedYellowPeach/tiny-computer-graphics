@@ -1,6 +1,6 @@
 use crate::raytracer::{Albedo, Color};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Material {
     pub diffuse_color: Color,
     // NOTE: albedo represents reflectivity of the surface

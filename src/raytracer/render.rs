@@ -5,9 +5,8 @@ use rayon::prelude::*;
 
 use std::fmt::Write;
 
-use crate::raytracer::world::Scene;
-
 use super::world::background::Background;
+use crate::raytracer::world::Scene;
 
 fn progress_bar_style() -> ProgressStyle {
     let text = [

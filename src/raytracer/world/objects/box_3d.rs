@@ -105,7 +105,7 @@ mod test {
                 AABBox::try_build(
                     Position::new(5., -1., -1.),
                     Position::new(7., 1., 1.),
-                    Material::IVORY,
+                    Material::default(),
                 )
                 .unwrap(),
                 Ray::new(Position::new(0., 0., 0.), Direction::new(1., 0., 0.)),
@@ -115,7 +115,7 @@ mod test {
                 AABBox::try_build(
                     Position::new(5., -1., -1.),
                     Position::new(7., 1., 1.),
-                    Material::IVORY,
+                    Material::default(),
                 )
                 .unwrap(),
                 Ray::new(Position::new(0., 0., 0.), Direction::new(0., 0., 1.)),
@@ -125,7 +125,7 @@ mod test {
                 AABBox::try_build(
                     Position::new(1., 1., 1.),
                     Position::new(2., 2., 2.),
-                    Material::IVORY,
+                    Material::default(),
                 )
                 .unwrap(),
                 Ray::new(Position::new(0., 0., 0.), Direction::new(1., 1., 1.)),
@@ -150,7 +150,7 @@ mod test {
         let bbox = AABBox::try_build(
             Position::new(5., 5., 5.),
             Position::new(6., 6., 6.),
-            Material::IVORY,
+            Material::default(),
         )
         .unwrap();
 

@@ -3,7 +3,7 @@ use super::{
     objects::{Light, Visible},
     Camera, HitPoint, Ray,
 };
-use crate::raytracer::{Color, Direction};
+use crate::raytracer::{Color, Direction, Interval};
 
 const RECURSION_DEPTH: usize = 5;
 
@@ -62,6 +62,7 @@ where
     fn direct_illumination(&self, ray: &Ray, hit_point: &HitPoint) -> (f64, f64) {
         let mut diffuse_light_intensity = 0.;
         let mut specular_light_intensity = 0.;
+        // BUG: should be surface_norm or norm_of???
         let N = hit_point.surface_norm();
 
         for light in &self.lights {
@@ -153,17 +154,19 @@ where
         // background should fill the whole scene
         let mut min_hit_dist = f64::MAX;
         let mut ret = None;
+        let interval = Interval::new(0., self.view_range);
 
         for obj in self.objects.iter() {
-            if let Some(t) = obj.hit_by_ray(ray) {
+            if let Some(t) = obj.hit_by_ray(ray, &interval) {
                 if t >= min_hit_dist {
                     continue;
                 }
 
                 min_hit_dist = t;
                 let hit_point = ray.at(t);
+                let is_outside = ray.dir.dot(&obj.norm_of(&hit_point)) < 0.;
 
-                ret = Some(HitPoint::new(obj.as_ref(), hit_point));
+                ret = Some(HitPoint::new(obj.as_ref(), hit_point, is_outside));
             }
         }
 

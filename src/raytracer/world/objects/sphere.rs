@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use super::{material::Material, Visible};
 use crate::raytracer::world::Ray;
-use crate::raytracer::{Color, Direction, Position};
+use crate::raytracer::{Color, Direction, Interval, Position};
 use nalgebra::Vector3;
 
 #[derive(Clone, Debug)]
@@ -23,7 +23,7 @@ impl Sphere {
 }
 
 impl Visible for Sphere {
-    fn hit_by_ray(&self, ray: &Ray) -> Option<f64> {
+    fn hit_by_ray(&self, ray: &Ray, interval: &Interval) -> Option<f64> {
         // NOTE:
         //     ->  ->
         // a=  d * d
@@ -46,15 +46,13 @@ impl Visible for Sphere {
         let near = (-b - descriminant.sqrt()) / (2. * a);
         let far = (-b + descriminant.sqrt()) / (2. * a);
 
-        if near < 0. && far < 0. {
-            return None;
+        if interval.contains(near) {
+            Some(near)
+        } else if interval.contains(far) {
+            Some(far)
+        } else {
+            None
         }
-
-        if near < 0. {
-            return Some(far);
-        }
-
-        Some(near)
     }
 
     fn material_of(&self, _pos: &Position) -> Cow<'_, Material> {
@@ -75,8 +73,8 @@ impl GradientSphere {
 }
 
 impl Visible for GradientSphere {
-    fn hit_by_ray(&self, ray: &Ray) -> Option<f64> {
-        self.0.hit_by_ray(ray)
+    fn hit_by_ray(&self, ray: &Ray, interval: &Interval) -> Option<f64> {
+        self.0.hit_by_ray(ray, interval)
     }
 
     fn material_of(&self, pos: &Position) -> Cow<'_, Material> {
@@ -104,14 +102,22 @@ mod tests {
         let sphere = Sphere::new(Position::new(2., 2., 2.), 1., Material::default());
         let l = 2. * 3f64.sqrt() - 1.;
 
-        assert_abs_diff_eq!(sphere.hit_by_ray(&ray).unwrap(), l, epsilon = 1e-6);
+        assert_abs_diff_eq!(
+            sphere.hit_by_ray(&ray, &Interval::POSITIVE).unwrap(),
+            l,
+            epsilon = 1e-6
+        );
 
         // no intersection
         let ray = Ray::new(Position::new(0., 0., 0.), Direction::new(0., 0., 1.));
-        assert!(sphere.hit_by_ray(&ray).is_none());
+        assert!(sphere.hit_by_ray(&ray, &Interval::POSITIVE).is_none());
 
         // one
         let ray = Ray::new(Position::new(2., 1., 0.), Direction::new(0., 0., 1.));
-        assert_abs_diff_eq!(sphere.hit_by_ray(&ray).unwrap(), 2., epsilon = 1e-6);
+        assert_abs_diff_eq!(
+            sphere.hit_by_ray(&ray, &Interval::POSITIVE).unwrap(),
+            2.,
+            epsilon = 1e-6
+        );
     }
 }

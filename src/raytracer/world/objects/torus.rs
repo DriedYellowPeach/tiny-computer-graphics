@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 use super::{Material, Visible};
-use crate::raytracer::{Direction, Position};
+use crate::raytracer::{Direction, Interval, Position};
 
 #[allow(non_snake_case)]
 pub struct Torus {
@@ -13,7 +13,7 @@ pub struct Torus {
 }
 
 impl Visible for Torus {
-    fn hit_by_ray(&self, _ray: &crate::raytracer::world::Ray) -> Option<f64> {
+    fn hit_by_ray(&self, _ray: &crate::raytracer::world::Ray, _interval: &Interval) -> Option<f64> {
         todo!()
     }
 

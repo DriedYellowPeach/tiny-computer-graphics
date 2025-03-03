@@ -148,8 +148,7 @@ mod tests {
         let scene = example_scene();
 
         render(&mut img, &scene);
-        img.save("output/customized_ray_tracer_gradient.png")
-            .unwrap();
+        img.save("output/customized_ray_tracer_4.png").unwrap();
     }
 
     #[test]

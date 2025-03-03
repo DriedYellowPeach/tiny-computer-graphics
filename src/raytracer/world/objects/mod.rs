@@ -1,5 +1,5 @@
 use super::Ray;
-use crate::raytracer::{Direction, Position};
+use crate::raytracer::{Direction, Interval, Position};
 
 use std::borrow::Cow;
 
@@ -16,7 +16,7 @@ pub use sphere::{GradientSphere, Sphere};
 pub trait Visible: Sync + Send {
     /// return the distance from the origin to the hit point
     // PERF: give another bbox1D to accelerate the hit test
-    fn hit_by_ray(&self, ray: &Ray) -> Option<f64>;
+    fn hit_by_ray(&self, ray: &Ray, interval: &Interval) -> Option<f64>;
 
     /// The material of the object on that position
     fn material_of(&self, pos: &Position) -> Cow<'_, material::Material>;

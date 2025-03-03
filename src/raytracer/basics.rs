@@ -2,7 +2,7 @@ use approx::{relative_eq, AbsDiffEq};
 use image::{Pixel, Rgb};
 use nalgebra::{Matrix3x4, Vector3, Vector4};
 
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Range};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Position(Vector3<f64>);
@@ -85,7 +85,6 @@ impl Direction {
 
     #[allow(non_snake_case)]
     pub fn reflection(&self, N: &Self) -> Self {
-        // assert!((N.magnitude() - 1.0).abs() <= 1e-6);
         let I = self;
         let I_proj = I.0.dot(&N.0) * N.0;
 
@@ -93,22 +92,11 @@ impl Direction {
     }
 
     #[allow(non_snake_case)]
-    pub fn refraction(&self, N: &Self, refractive_index: f64) -> Self {
-        let mut n1 = 1.;
-        let mut n2 = refractive_index;
-        let mut N = *N;
+    pub fn refraction(&self, N: &Self, n1: f64, n2: f64) -> Self {
+        let N = *N;
         let I = self;
 
-        let mut cos_theta1 = -I.0.dot(&N.0).clamp(-1., 1.);
-
-        // NOTE: this means inside the object
-        // we swap the setting and then calculate
-        if cos_theta1 < 0. {
-            cos_theta1 = -cos_theta1;
-            std::mem::swap(&mut n1, &mut n2);
-            N = Self::from(-N.0);
-        }
-
+        let cos_theta1 = -I.0.dot(&N.0).clamp(-1., 1.);
         let sin_theta1 = (1. - cos_theta1.powi(2)).sqrt().clamp(-1., 1.);
         let sin_theta2 = (n1 / n2 * sin_theta1).clamp(-1., 1.);
         let cos_theta2 = (1. - sin_theta2.powi(2)).sqrt().clamp(-1., 1.);
@@ -244,5 +232,32 @@ impl Mul<Color> for f64 {
 
     fn mul(self, rhs: Color) -> Self::Output {
         rhs * self
+    }
+}
+
+pub struct Interval(pub Range<f64>);
+
+impl Interval {
+    pub const FULL: Self = Self(f64::NEG_INFINITY..f64::INFINITY);
+    pub const POSITIVE: Self = Self(0.0..f64::INFINITY);
+
+    pub fn new(start: f64, end: f64) -> Self {
+        Self(start..end)
+    }
+
+    pub fn start(&self) -> f64 {
+        self.0.start
+    }
+
+    pub fn end(&self) -> f64 {
+        self.0.end
+    }
+
+    pub fn contains(&self, x: f64) -> bool {
+        self.0.contains(&x)
+    }
+
+    pub fn surronds(&self, x: f64) -> bool {
+        !self.0.contains(&x)
     }
 }

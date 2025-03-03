@@ -1,4 +1,4 @@
-use crate::raytracer::{Direction, Position, EPSILON};
+use crate::raytracer::{Direction, Interval, Position, EPSILON};
 use anyhow::{bail, Result};
 
 use std::borrow::Cow;
@@ -30,7 +30,7 @@ impl AABBox {
 }
 
 impl Visible for AABBox {
-    fn hit_by_ray(&self, ray: &Ray) -> Option<f64> {
+    fn hit_by_ray(&self, ray: &Ray, interval: &Interval) -> Option<f64> {
         let mut t_min = f64::MIN;
         let mut t_max = f64::MAX;
 
@@ -50,11 +50,19 @@ impl Visible for AABBox {
             }
         }
 
-        if t_min > t_max || t_min < 0. {
+        if t_min > t_max {
             return None;
         }
 
-        Some(t_min)
+        if interval.contains(t_min) {
+            return Some(t_min);
+        }
+
+        if interval.contains(t_max) {
+            return Some(t_max);
+        }
+
+        None
     }
 
     fn material_of(&self, _pos: &Position) -> Cow<'_, Material> {
@@ -136,7 +144,7 @@ mod test {
         ];
 
         for (bbox, ray, expected) in test_cases.into_iter() {
-            let output = bbox.hit_by_ray(&ray);
+            let output = bbox.hit_by_ray(&ray, &Interval::POSITIVE);
             match (output, expected) {
                 (Some(o), Some(e)) => assert_abs_diff_eq!(o, e),
                 (Some(_), None) | (None, Some(_)) => {

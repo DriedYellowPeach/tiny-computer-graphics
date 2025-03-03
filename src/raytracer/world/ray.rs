@@ -6,13 +6,15 @@ use crate::raytracer::{world::Visible, Direction, Position};
 pub struct HitPoint<'a> {
     pub obj: &'a dyn Visible,
     pub position: Position,
+    pub is_outside: bool,
 }
 
 impl<'a> HitPoint<'a> {
-    pub fn new(object: &'a dyn Visible, position: Position) -> Self {
+    pub fn new(object: &'a dyn Visible, position: Position, is_outside: bool) -> Self {
         Self {
             obj: object,
             position,
+            is_outside,
         }
     }
 
@@ -21,7 +23,12 @@ impl<'a> HitPoint<'a> {
     }
 
     pub fn surface_norm(&self) -> Direction {
-        self.obj.norm_of(&self.position)
+        let norm = self.obj.norm_of(&self.position);
+        if self.is_outside {
+            norm
+        } else {
+            norm.reverse()
+        }
     }
 }
 
@@ -57,9 +64,14 @@ impl Ray {
     #[allow(non_snake_case)]
     pub fn refracted(&self, hit_point: &HitPoint) -> Self {
         let N = hit_point.surface_norm();
-        let refract_dir = self
-            .dir
-            .refraction(&N, hit_point.surface_material().refractive_index);
+        let mut n1 = 1.;
+        let mut n2 = hit_point.surface_material().refractive_index;
+
+        if !hit_point.is_outside {
+            std::mem::swap(&mut n1, &mut n2);
+        };
+
+        let refract_dir = self.dir.refraction(&N, n1, n2);
 
         let refract_orig = if refract_dir.is_acute_angle(&N) {
             hit_point.position.move_forward(1e-3, &N)

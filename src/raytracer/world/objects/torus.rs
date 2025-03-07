@@ -21,7 +21,7 @@ impl Visible for Torus {
         Cow::Borrowed(&self.material)
     }
 
-    fn norm_of(&self, pos: &Position) -> crate::raytracer::Direction {
+    fn surface_norm(&self, pos: &Position) -> crate::raytracer::Direction {
         let rp = pos.as_ref() - self.center.as_ref();
 
         let sin_theta = rp.z / self.r;
@@ -48,18 +48,18 @@ mod tests {
         };
 
         assert_eq!(
-            torus.norm_of(&Position::new(2., 0., 1.)),
+            torus.surface_norm(&Position::new(2., 0., 1.)),
             Direction::new(0., 0., 1.)
         );
 
         assert_eq!(
-            torus.norm_of(&Position::new(3., 0., 0.)),
+            torus.surface_norm(&Position::new(3., 0., 0.)),
             Direction::new(1., 0., 0.)
         );
 
         // more trivia angle
         assert_abs_diff_eq!(
-            torus.norm_of(&Position::new(2. + 2f64.sqrt() / 2., 0., 2f64.sqrt() / 2.)),
+            torus.surface_norm(&Position::new(2. + 2f64.sqrt() / 2., 0., 2f64.sqrt() / 2.)),
             Direction::new(1., 0., 1.),
         );
 
@@ -72,7 +72,7 @@ mod tests {
         };
 
         assert_abs_diff_eq!(
-            torus.norm_of(&Position::new(5., 3., 4.)),
+            torus.surface_norm(&Position::new(5., 3., 4.)),
             Direction::new(1., 0., 0.)
         );
     }

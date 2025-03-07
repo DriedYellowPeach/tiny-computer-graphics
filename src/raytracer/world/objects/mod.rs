@@ -22,5 +22,5 @@ pub trait Visible: Sync + Send {
     fn material_of(&self, pos: &Position) -> Cow<'_, material::Material>;
 
     /// The normal vector of hit pos
-    fn norm_of(&self, pos: &Position) -> Direction;
+    fn surface_norm(&self, pos: &Position) -> Direction;
 }

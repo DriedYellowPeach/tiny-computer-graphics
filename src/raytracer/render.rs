@@ -144,7 +144,7 @@ mod tests {
 
     #[test]
     fn test_render() {
-        let mut img = RgbImage::new(800, 450);
+        let mut img = RgbImage::new(3200, 1800);
         let scene = example_scene();
 
         render(&mut img, &scene);

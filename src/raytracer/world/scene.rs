@@ -63,7 +63,7 @@ where
         let mut diffuse_light_intensity = 0.;
         let mut specular_light_intensity = 0.;
         // BUG: should be surface_norm or norm_of???
-        let N = hit_point.surface_norm();
+        let N = hit_point.norm();
 
         for light in &self.lights {
             let to_light = Direction::a_to_b(&hit_point.position, &light.position);
@@ -164,7 +164,7 @@ where
 
                 min_hit_dist = t;
                 let hit_point = ray.at(t);
-                let is_outside = ray.dir.dot(&obj.norm_of(&hit_point)) < 0.;
+                let is_outside = ray.dir.dot(&obj.surface_norm(&hit_point)) < 0.;
 
                 ret = Some(HitPoint::new(obj.as_ref(), hit_point, is_outside));
             }

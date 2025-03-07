@@ -59,7 +59,7 @@ impl Visible for Sphere {
         Cow::Borrowed(&self.material)
     }
 
-    fn norm_of(&self, pos: &Position) -> Direction {
+    fn surface_norm(&self, pos: &Position) -> Direction {
         Direction::from(pos.as_ref() - self.center.as_ref())
     }
 }
@@ -78,15 +78,15 @@ impl Visible for GradientSphere {
     }
 
     fn material_of(&self, pos: &Position) -> Cow<'_, Material> {
-        let norm = self.norm_of(pos);
+        let norm = self.surface_norm(pos);
         let gradient_color = (norm.as_ref() + Vector3::new(1., 1., 1.)) * 0.5;
         let mut temp_mat = self.0.material.clone();
         temp_mat.diffuse_color = Color::from(gradient_color);
         Cow::Owned(temp_mat)
     }
 
-    fn norm_of(&self, pos: &Position) -> Direction {
-        self.0.norm_of(pos)
+    fn surface_norm(&self, pos: &Position) -> Direction {
+        self.0.surface_norm(pos)
     }
 }
 

@@ -69,7 +69,7 @@ impl Visible for AABBox {
         Cow::Borrowed(&self.material)
     }
 
-    fn norm_of(&self, pos: &Position) -> Direction {
+    fn surface_norm(&self, pos: &Position) -> Direction {
         // test if on slab perpendicular to x axis
         let pos = pos.as_ref();
         let low = self.low.as_ref();
@@ -179,7 +179,7 @@ mod test {
         ];
 
         for (p, r) in text_cases.into_iter() {
-            let output = bbox.norm_of(&p);
+            let output = bbox.surface_norm(&p);
             assert_eq!(
                 output, r,
                 "Input: {p:#?}, Expected: {r:#?}, Got: {output:#?}"

@@ -22,8 +22,8 @@ impl<'a> HitPoint<'a> {
         self.obj.material_of(&self.position)
     }
 
-    pub fn surface_norm(&self) -> Direction {
-        let norm = self.obj.norm_of(&self.position);
+    pub fn norm(&self) -> Direction {
+        let norm = self.obj.surface_norm(&self.position);
         if self.is_outside {
             norm
         } else {
@@ -49,7 +49,7 @@ impl Ray {
 
     #[allow(non_snake_case)]
     pub fn reflected(&self, hit_point: &HitPoint) -> Self {
-        let N = hit_point.surface_norm();
+        let N = hit_point.norm();
         let reflect_dir = self.dir.reflection(&N);
 
         let reflect_orig = if reflect_dir.is_acute_angle(&N) {
@@ -63,7 +63,7 @@ impl Ray {
 
     #[allow(non_snake_case)]
     pub fn refracted(&self, hit_point: &HitPoint) -> Self {
-        let N = hit_point.surface_norm();
+        let N = hit_point.norm();
         let mut n1 = 1.;
         let mut n2 = hit_point.surface_material().refractive_index;
 

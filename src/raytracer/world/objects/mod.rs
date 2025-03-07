@@ -9,6 +9,7 @@ pub mod material;
 pub mod sphere;
 pub mod torus;
 
+pub use box_3d::AABBox;
 pub use light::Light;
 pub use material::Material;
 pub use sphere::{GradientSphere, Sphere};

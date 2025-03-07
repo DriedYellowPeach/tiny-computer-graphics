@@ -68,7 +68,7 @@ fn is_in_triangle(
     // NOTE: if there is no inverse, means the triangle degenerate
     // We don't draw the line
     // return false
-    mat.try_inverse().map_or(false, |mat_inv| {
+    mat.try_inverse().is_some_and(|mat_inv| {
         let uv = mat_inv * bp;
         uv.x >= 0.0 && uv.y >= 0.0 && uv.x + uv.y <= 1.0
     })

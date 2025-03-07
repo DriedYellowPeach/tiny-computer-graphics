@@ -1,7 +1,11 @@
+use image::{Rgb, RgbImage};
+use indicatif::ParallelProgressIterator;
 use nalgebra::{Matrix3, Vector2, Vector3};
+use rayon::{iter::ParallelIterator, prelude::*};
 
-use super::Ray;
-use crate::raytracer::{Direction, Position};
+use crate::raytracer::{progress_bar_style, world::Ray, Direction, Position};
+
+use super::world::{background::Background, Scene};
 
 pub struct Camera {
     pub film_distance: f64,
@@ -85,7 +89,7 @@ impl Camera {
     }
 
     /// Mapping the pixel on canvas to the pixel on the film in front of camera
-    pub fn pixel_on_film(&self, idx: usize, img_width: u32, img_height: u32) -> Vector2<f64> {
+    fn film_pixel(&self, idx: usize, img_width: u32, img_height: u32) -> Vector2<f64> {
         // NOTE: map pixel to [-1, 1]
         // a.k.a. normalize device coordinates
         let idx = idx as u32;
@@ -107,5 +111,21 @@ impl Camera {
             x_ndc * tan_fov * self.film_distance,
             y_ndc * tan_fov * self.film_distance,
         )
+    }
+
+    pub fn render<B: Background>(&self, scene: &Scene<B>, img: &mut RgbImage) {
+        let width = img.width();
+        let height = img.height();
+
+        img.par_pixels_mut()
+            .progress_with_style(progress_bar_style())
+            .enumerate()
+            .for_each(|(idx, pixel)| {
+                let pxl = self.film_pixel(idx, width, height);
+                let ray = self.ray_to_pixel(pxl.x, pxl.y);
+                let color = scene.cast_ray(&ray, 0);
+
+                *pixel = Rgb::from(color);
+            });
     }
 }

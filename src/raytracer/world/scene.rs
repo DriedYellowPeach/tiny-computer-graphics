@@ -1,7 +1,7 @@
 use super::{
     background::Background,
     objects::{Light, Visible},
-    Camera, HitPoint, Ray,
+    HitPoint, Ray,
 };
 use crate::raytracer::{Color, Direction, Interval};
 
@@ -10,7 +10,6 @@ const RECURSION_DEPTH: usize = 5;
 pub struct Scene<B> {
     pub lights: Vec<Light>,
     objects: Vec<Box<dyn Visible>>,
-    pub camera: Camera,
     // TODO: What shape should background be?
     // if it's a big sphere?
     background: Option<B>,
@@ -22,7 +21,6 @@ impl<B> Default for Scene<B> {
         Self {
             lights: Vec::new(),
             objects: Vec::new(),
-            camera: Camera::default(),
             background: None,
             view_range: 1000.,
         }
@@ -48,11 +46,6 @@ where
         self
     }
 
-    pub fn update_camera(mut self, camera: Camera) -> Self {
-        self.camera = camera;
-        self
-    }
-
     pub fn update_view_range(mut self, view_range: f64) -> Self {
         self.view_range = view_range;
         self
@@ -75,13 +68,10 @@ where
 
             let shadow_ray = Ray::shadowed(hit_point, &light.position);
 
-            if self
-                .intersect(&shadow_ray)
-                .map_or(false, |shadow_hit_point| {
-                    shadow_hit_point.position.distance_to(&shadow_ray.position)
-                        < hit_point_to_light_dist
-                })
-            {
+            if self.intersect(&shadow_ray).is_some_and(|shadow_hit_point| {
+                shadow_hit_point.position.distance_to(&shadow_ray.position)
+                    < hit_point_to_light_dist
+            }) {
                 continue;
             }
 
@@ -178,9 +168,8 @@ where
     }
 
     pub fn intersect_background(&self, ray: &Ray) -> Color {
-        return self
-            .background
+        self.background
             .as_ref()
-            .map_or(Color::BLACK, |bg| bg.get_color(ray));
+            .map_or(Color::BLACK, |bg| bg.get_color(ray))
     }
 }

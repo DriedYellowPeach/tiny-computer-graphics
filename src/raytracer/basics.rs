@@ -1,7 +1,9 @@
 use approx::{relative_eq, AbsDiffEq};
 use image::{Pixel, Rgb};
+use indicatif::{ProgressState, ProgressStyle};
 use nalgebra::{Matrix3x4, Vector3, Vector4};
 
+use std::fmt::Write;
 use std::ops::{Add, Mul, Range};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -260,4 +262,22 @@ impl Interval {
     pub fn surronds(&self, x: f64) -> bool {
         !self.0.contains(&x)
     }
+}
+
+pub fn progress_bar_style() -> ProgressStyle {
+    let text = [
+        "[{bar:48.cyan/blue}] {percent}% {spinner:.green}",
+        "Elapsed Time     : {elapsed_precise}",
+        "ETA              : {eta}",
+        "Tracing Progress : {pos}/{len} rays",
+        "Tracing Speed    : {per_sec}",
+    ]
+    .join("\n");
+
+    ProgressStyle::with_template(&text)
+        .unwrap()
+        .with_key("per_sec", |state: &ProgressState, w: &mut dyn Write| {
+            _ = write!(w, "{:.0} rays/sec", state.per_sec());
+        })
+        .progress_chars("#>-")
 }

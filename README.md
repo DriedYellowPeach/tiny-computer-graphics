@@ -7,3 +7,9 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 |       tinyrenderer        |               tinyraytracer                |
 | :-----------------------: | :----------------------------------------: |
 | ![img](./output/head.png) | ![img](./output/customized_ray_tracer.png) |
+
+## Some Examples
+
+|           examples           |               Images               |
+| :--------------------------: | :--------------------------------: |
+| [first](./examples/first.rs) | ![img](./output/example_first.png) |

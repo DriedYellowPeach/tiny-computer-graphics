@@ -50,15 +50,8 @@ impl Ray {
     #[allow(non_snake_case)]
     pub fn reflected(&self, hit_point: &HitPoint) -> Self {
         let N = hit_point.norm();
-        let reflect_dir = self.dir.reflection(&N);
 
-        let reflect_orig = if reflect_dir.is_acute_angle(&N) {
-            hit_point.position.move_forward(1e-3, &N)
-        } else {
-            hit_point.position.move_forward(-1e-3, &N)
-        };
-
-        Self::new(reflect_orig, reflect_dir)
+        Self::new(hit_point.position, self.dir.reflection(&N))
     }
 
     #[allow(non_snake_case)]
@@ -71,22 +64,13 @@ impl Ray {
             std::mem::swap(&mut n1, &mut n2);
         };
 
-        let refract_dir = self.dir.refraction(&N, n1, n2);
-
-        let refract_orig = if refract_dir.is_acute_angle(&N) {
-            hit_point.position.move_forward(1e-3, &N)
-        } else {
-            hit_point.position.move_forward(-1e-3, &N)
-        };
-
-        Self::new(refract_orig, refract_dir)
+        Self::new(hit_point.position, self.dir.refraction(&N, n1, n2))
     }
 
     pub fn shadowed(hit_point: &HitPoint, light_pos: &Position) -> Self {
         let to_light = Direction::a_to_b(&hit_point.position, light_pos);
         // WARN: I change the move direction to to_light, previous I use N
-        let shadow_orig = hit_point.position.move_forward(1e-3, &to_light);
-        Self::new(shadow_orig, to_light)
+        Self::new(hit_point.position, to_light)
     }
 }
 

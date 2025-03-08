@@ -20,7 +20,7 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 
 |                  before                  |                       after                        |
 | :--------------------------------------: | :------------------------------------------------: |
-| [!img](./output/example_single_ball.png) | ![img](./output/example_single_ball_antialias.png) |
+| ![img](./output/example_single_ball.png) | ![img](./output/example_single_ball_antialias.png) |
 
 ### Monte Carlo Path Tracing
 

@@ -17,7 +17,7 @@ fn example_scene() -> Scene<DummyBackground> {
     let l2 = Light::new(Position::new(30., 50., -25.), 1.8);
     let l3 = Light::new(Position::new(30., 20., 30.), 1.7);
 
-    let sp1 = Sphere::new(Position::new(-3., 0., -16.), 2., red_rubber.clone());
+    let sp1 = Sphere::new(Position::new(-3., 0., -16.), 8., red_rubber.clone());
     Scene::default()
         .add_background(DummyBackground)
         .add_object(sp1)

@@ -22,6 +22,10 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 | :--------------------------------------: | :------------------------------------------------: |
 | ![img](./output/example_single_ball.png) | ![img](./output/example_single_ball_antialias.png) |
 
+|               zoom in                |
+| :----------------------------------: |
+| ![img](./output/example_zoom_in.png) |
+
 ### Monte Carlo Path Tracing
 
 |                      result                      |

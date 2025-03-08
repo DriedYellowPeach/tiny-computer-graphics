@@ -10,8 +10,6 @@ const RECURSION_DEPTH: usize = 5;
 pub struct Scene<B> {
     pub lights: Vec<Light>,
     objects: Vec<Box<dyn Visible>>,
-    // TODO: What shape should background be?
-    // if it's a big sphere?
     background: Option<B>,
     view_range: f64,
 }

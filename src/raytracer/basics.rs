@@ -4,7 +4,7 @@ use indicatif::{ProgressState, ProgressStyle};
 use nalgebra::{Matrix3x4, Vector3, Vector4};
 
 use std::fmt::Write;
-use std::ops::{Add, Mul, Range};
+use std::ops::{Add, Div, Mul, Range};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Position(Vector3<f64>);
@@ -237,6 +237,14 @@ impl Mul<Color> for f64 {
     }
 }
 
+impl Div<f64> for Color {
+    type Output = Self;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        Self::from(self.0 / rhs)
+    }
+}
+
 pub struct Interval(pub Range<f64>);
 
 impl Interval {
@@ -269,7 +277,7 @@ pub fn progress_bar_style() -> ProgressStyle {
         "[{bar:48.cyan/blue}] {percent}% {spinner:.green}",
         "Elapsed Time     : {elapsed_precise}",
         "ETA              : {eta}",
-        "Tracing Progress : {pos}/{len} rays",
+        "Tracing Progress : {pos}/{len} pixels",
         "Tracing Speed    : {per_sec}",
     ]
     .join("\n");
@@ -277,7 +285,7 @@ pub fn progress_bar_style() -> ProgressStyle {
     ProgressStyle::with_template(&text)
         .unwrap()
         .with_key("per_sec", |state: &ProgressState, w: &mut dyn Write| {
-            _ = write!(w, "{:.0} rays/sec", state.per_sec());
+            _ = write!(w, "{:.0} pixels/sec", state.per_sec());
         })
         .progress_chars("#>-")
 }

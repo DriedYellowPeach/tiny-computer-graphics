@@ -7,7 +7,7 @@ pub use basics::*;
 pub mod prelude {
     pub use super::{
         basics::*,
-        camera::Camera,
+        camera::{Camera, CameraBuilder},
         world::{background::DummyBackground, objects::*, scene::Scene},
     };
 }

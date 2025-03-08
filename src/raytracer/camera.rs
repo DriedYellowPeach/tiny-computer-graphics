@@ -7,11 +7,11 @@ use rayon::{iter::ParallelIterator, prelude::*};
 use crate::raytracer::{progress_bar_style, world::Ray, Direction, Position};
 
 use super::{
-    world::{background::Background, Scene},
+    world::{background::Background, RayCastStrategy, Scene},
     Color,
 };
 
-const SAMPLES_PER_PIXEL: usize = 100;
+const SAMPLES_PER_PIXEL: usize = 10;
 
 #[derive(Clone, Debug)]
 pub struct Camera {
@@ -150,23 +150,23 @@ impl Camera {
         )
     }
 
-    fn pixel_color<B: Background>(
+    fn pixel_color<B: Background, S: RayCastStrategy>(
         &self,
-        scene: &Scene<B>,
+        scene: &Scene<B, S>,
         idx: usize,
         width: u32,
         height: u32,
     ) -> Rgb<u8> {
         let pxl = self.to_film_pixel(idx, width, height);
         let ray = self.ray_to_pixel(pxl.x, pxl.y);
-        let color = scene.cast_ray(&ray, 0);
+        let color = scene.cast_ray(&ray);
 
         Rgb::from(color)
     }
 
-    fn pixel_color_by_sampling<B: Background>(
+    fn pixel_color_by_sampling<B: Background, S: RayCastStrategy>(
         &self,
-        scene: &Scene<B>,
+        scene: &Scene<B, S>,
         idx: usize,
         width: u32,
         height: u32,
@@ -176,7 +176,7 @@ impl Camera {
         for _i in 0..SAMPLES_PER_PIXEL {
             let pxl = self.to_sample_film_pixel(idx, width, height);
             let ray = self.ray_to_pixel(pxl.x, pxl.y);
-            color = color + scene.cast_ray(&ray, 0);
+            color = color + scene.cast_ray(&ray);
         }
 
         color = color / SAMPLES_PER_PIXEL as f64;
@@ -184,7 +184,11 @@ impl Camera {
         Rgb::from(color)
     }
 
-    pub fn render<B: Background>(&self, scene: &Scene<B>, img: &mut RgbImage) {
+    pub fn render<B: Background, S: RayCastStrategy>(
+        &self,
+        scene: &Scene<B, S>,
+        img: &mut RgbImage,
+    ) {
         let width = img.width();
         let height = img.height();
 

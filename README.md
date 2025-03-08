@@ -1,6 +1,6 @@
 ## Tiny Computer Graphics
 
-This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrenderer/wiki) and [tinyraytracer](https://github.com/ssloy/tinyraytracer/wiki).
+This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrenderer/wiki), [tinyraytracer](https://github.com/ssloy/tinyraytracer/wiki) and [RayTracerInOneWeekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html).
 
 ## Some Results
 
@@ -13,3 +13,17 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 |           examples           |               Images               |
 | :--------------------------: | :--------------------------------: |
 | [first](./examples/first.rs) | ![img](./output/example_first.png) |
+
+## Features
+
+### anti-aliasing
+
+|                  before                  |                       after                        |
+| :--------------------------------------: | :------------------------------------------------: |
+| [!img](./output/example_single_ball.png) | ![img](./output/example_single_ball_antialias.png) |
+
+### Monte Carlo Path Tracing
+
+|                      result                      |
+| :----------------------------------------------: |
+| ![img](./output/example_monte_carlo_diffuse.png) |

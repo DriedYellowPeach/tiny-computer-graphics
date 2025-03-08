@@ -5,4 +5,4 @@ pub mod scene;
 
 pub use objects::{Light, Visible};
 pub use ray::{HitPoint, Ray};
-pub use scene::Scene;
+pub use scene::{Lambertian, MonteCarlo, RayCastStrategy, Scene};

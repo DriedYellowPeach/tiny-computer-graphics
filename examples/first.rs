@@ -91,7 +91,7 @@ fn example_scene() -> Scene<DummyBackground> {
 
 fn main() {
     // 16:9
-    let mut img = RgbImage::new(3200, 1800);
+    let mut img = RgbImage::new(1600, 900);
     let scene = example_scene();
     let camera = Camera::default();
 

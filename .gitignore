@@ -1,4 +1,5 @@
 /target
+.DS_Store
 /obj/common-3d-test-models/
 output/*
 !output/customized_ray_tracer.png

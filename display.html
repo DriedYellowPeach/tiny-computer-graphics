@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <img
+      height="200"
+      width="200"
+      id="animatedImage"
+      src="output/rotation/rotation_box_0.png"
+      alt="Animation"
+    />
+
+    <script>
+      let currentFrame = 0;
+      const totalFrames = 60; // Total number of images from 01 to 30
+      const imageElement = document.getElementById("animatedImage");
+      let forward = true;
+
+      function updateImage() {
+        if (forward) {
+          currentFrame = (currentFrame + 1) % 60;
+          if (currentFrame === totalFrames) {
+            forward = false; // Switch direction to backward once we reach frame 30
+          }
+        }
+        // } else {
+        //   currentFrame--;
+        //   if (currentFrame === 0) {
+        //     forward = true; // Switch direction to forward once we reach frame 00
+        //   }
+        // }
+
+        let frameNumber = currentFrame.toString();
+        imageElement.src = `output/rotation/rotation_box_${frameNumber}.png`; // Update image source
+      }
+
+      // Update image every 200 milliseconds (0.2 second) for faster animation
+      setInterval(updateImage, 50);
+    </script>
+  </body>
+</html>

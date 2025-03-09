@@ -31,3 +31,9 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 |                      result                      |
 | :----------------------------------------------: |
 | ![img](./output/example_monte_carlo_diffuse.png) |
+
+### Rotating Boxes
+
+|                 boxes                 |
+| :-----------------------------------: |
+| ![img](./output/example_rotating.gif) |

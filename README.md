@@ -35,5 +35,3 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 ### Rotating Boxes
 
 [![Watch the video](https://github.com/user-attachments/assets/5e1d5027-dfb7-47bc-bf89-b5b86f11f132)](https://github.com/user-attachments/assets/5e1d5027-dfb7-47bc-bf89-b5b86f11f132)
-
-

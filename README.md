@@ -36,6 +36,6 @@ This is rust implementation of [tinyrenderer](https://github.com/ssloy/tinyrende
 
 [![Watch the video](https://github.com/user-attachments/assets/5e1d5027-dfb7-47bc-bf89-b5b86f11f132)](https://github.com/user-attachments/assets/5e1d5027-dfb7-47bc-bf89-b5b86f11f132)
 
-> [!NOTE] I implement this basically on two crates
+> [!note] I implement this basically on two crates
 >   - nalgebra
 >   - image
